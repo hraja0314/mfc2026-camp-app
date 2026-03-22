@@ -263,20 +263,21 @@
       }
 
       try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ref: currentRef,
-            name: reg.name,
-            packageLabel: reg.packageLabel,
-            groupSize: reg.groupSize,
-            ages: ages,
-          }),
+        const payload = JSON.stringify({
+          ref: currentRef,
+          name: reg.name,
+          packageLabel: reg.packageLabel,
+          groupSize: reg.groupSize,
+          ages: ages,
         });
 
-        // no-cors means we can't read the response, but the request goes through
+        // Use form-encoded POST (works with Google Apps Script CORS)
+        await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: new URLSearchParams({ data: payload }),
+        });
+
         document.getElementById('step-ages').classList.add('hidden');
         document.getElementById('step-done').classList.remove('hidden');
       } catch (err) {
