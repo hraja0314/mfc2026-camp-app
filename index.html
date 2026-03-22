@@ -32,6 +32,10 @@
         <span class="icon">📊</span>
         <span class="label">Dashboard</span>
       </div>
+      <div class="home-btn" onclick="showScreen('cabins'); loadCabins()">
+        <span class="icon">🏕️</span>
+        <span class="label">Cabins</span>
+      </div>
       <div class="home-btn" onclick="showScreen('checkin'); showManualLookup()">
         <span class="icon">🔍</span>
         <span class="label">Lookup</span>
@@ -71,6 +75,23 @@
     <div id="dash-table-container" class="table-container"></div>
   </div>
 
+  <!-- ===== CABINS ===== -->
+  <div id="cabins" class="screen">
+    <div class="section-title">Cabin Allocation</div>
+    <div id="cabin-stats" class="stats-row"></div>
+    <div class="cabin-tabs">
+      <button class="cabin-tab active" onclick="showCabinView('assignments')">Assignments</button>
+      <button class="cabin-tab" onclick="showCabinView('map')">Cabin Map</button>
+    </div>
+    <div id="cabin-assignments" class="cabin-view">
+      <p style="font-size:13px; color:var(--gray); margin-bottom:8px;">Tap a registration to assign a cabin:</p>
+      <div id="cabin-assign-list"></div>
+    </div>
+    <div id="cabin-map" class="cabin-view" style="display:none;">
+      <div id="cabin-grid-container"></div>
+    </div>
+  </div>
+
   <!-- Bottom Nav -->
   <nav class="bottom-nav">
     <button class="nav-btn active" data-screen="home">
@@ -81,6 +102,9 @@
     </button>
     <button class="nav-btn" data-screen="meals">
       <span class="icon">🍽️</span> Meals
+    </button>
+    <button class="nav-btn" data-screen="cabins">
+      <span class="icon">🏕️</span> Cabins
     </button>
     <button class="nav-btn" data-screen="dashboard">
       <span class="icon">📊</span> Dashboard

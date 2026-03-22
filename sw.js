@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mfc2026-v1';
+const CACHE_NAME = 'mfc2026-v2';
 const ASSETS = [
   './',
   './index.html',

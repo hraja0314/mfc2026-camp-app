@@ -1,7 +1,7 @@
 /* IndexedDB data layer for MFC 2026 Camp App */
 
 const DB_NAME = 'mfc2026';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 function openDB() {
   return new Promise((resolve, reject) => {
@@ -15,6 +15,10 @@ function openDB() {
         const store = db.createObjectStore('mealScans', { keyPath: 'id', autoIncrement: true });
         store.createIndex('byQrMeal', ['qrId', 'mealId'], { unique: false });
         store.createIndex('byMeal', 'mealId', { unique: false });
+      }
+      if (!db.objectStoreNames.contains('cabinAssignments')) {
+        const store = db.createObjectStore('cabinAssignments', { keyPath: 'qrId' });
+        store.createIndex('byCabin', 'cabinNumber', { unique: false });
       }
     };
     req.onsuccess = () => resolve(req.result);
@@ -119,9 +123,13 @@ async function getMealScansForQr(qrId) {
 async function exportCSV() {
   const checkins = await getAllCheckins();
   const scans = await getAllMealScans();
+  const assignments = await getAllCabinAssignments();
 
   const checkinMap = {};
   checkins.forEach(c => { checkinMap[c.qrId] = c.time; });
+
+  const assignMap = {};
+  assignments.forEach(a => { assignMap[a.qrId] = a.cabinNumber; });
 
   const scanMap = {};
   scans.forEach(s => {
@@ -131,12 +139,12 @@ async function exportCSV() {
   });
 
   const mealIds = MEALS.map(m => m.id);
-  let csv = 'QR_ID,GroupLead,Package,GroupSize,CheckInTime';
+  let csv = 'QR_ID,GroupLead,Package,GroupSize,Cabin,CheckInTime';
   mealIds.forEach(m => { csv += ',' + m; });
   csv += '\n';
 
   Object.values(PARTICIPANTS).forEach(p => {
-    csv += `${p.qrId},"${p.name}",${p.package},${p.groupSize},${checkinMap[p.qrId] || ''}`;
+    csv += `${p.qrId},"${p.name}",${p.package},${p.groupSize},${assignMap[p.qrId] || ''},${checkinMap[p.qrId] || ''}`;
     mealIds.forEach(m => {
       csv += ',' + ((scanMap[p.qrId] && scanMap[p.qrId][m]) || 0);
     });
@@ -144,4 +152,46 @@ async function exportCSV() {
   });
 
   return csv;
+}
+
+// ===== Cabin Assignments =====
+
+async function assignCabin(qrId, cabinNumber) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('cabinAssignments', 'readwrite');
+    tx.objectStore('cabinAssignments').put({ qrId, cabinNumber });
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function unassignCabin(qrId) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('cabinAssignments', 'readwrite');
+    tx.objectStore('cabinAssignments').delete(qrId);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function getCabinAssignment(qrId) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('cabinAssignments', 'readonly');
+    const req = tx.objectStore('cabinAssignments').get(qrId);
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function getAllCabinAssignments() {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('cabinAssignments', 'readonly');
+    const req = tx.objectStore('cabinAssignments').getAll();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
 }

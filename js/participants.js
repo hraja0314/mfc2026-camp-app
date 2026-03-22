@@ -809,3 +809,13 @@ const MEALS = [
     "day": "Sunday"
   }
 ];
+
+// Cabins: 1-19 = 4-person, 20-42 = 5-person, 43-62 = 4-person
+const CABINS = [];
+for (let i = 1; i <= 62; i++) {
+  CABINS.push({
+    number: i,
+    capacity: (i >= 20 && i <= 42) ? 5 : 4,
+    type: (i >= 20 && i <= 42) ? '5-person' : '4-person',
+  });
+}

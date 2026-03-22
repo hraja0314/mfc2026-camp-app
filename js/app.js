@@ -214,6 +214,136 @@ function formatTime(iso) {
   return d.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
 }
 
+// ===== Cabins Screen =====
+async function loadCabins() {
+  const assignments = await getAllCabinAssignments();
+  const assignMap = {};
+  const cabinToQr = {};
+  assignments.forEach(a => {
+    assignMap[a.qrId] = a.cabinNumber;
+    cabinToQr[a.cabinNumber] = a.qrId;
+  });
+
+  // Stats
+  const needsCabin = Object.values(PARTICIPANTS).filter(p => p.package !== 4);
+  const assigned = needsCabin.filter(p => assignMap[p.qrId]);
+  document.getElementById('cabin-stats').innerHTML = `
+    <div class="stat"><span class="stat-num">${assigned.length}</span><span class="stat-label">/ ${needsCabin.length} Assigned</span></div>
+    <div class="stat"><span class="stat-num">${62 - Object.keys(cabinToQr).length}</span><span class="stat-label">Cabins Free</span></div>
+  `;
+
+  // Assignment list
+  const groups = [
+    { label: '4-Person Cabins Needed', participants: Object.values(PARTICIPANTS).filter(p => p.package === 2) },
+    { label: '5-Person Cabins Needed', participants: Object.values(PARTICIPANTS).filter(p => p.package === 3) },
+    { label: 'Singles (Shared Cabin)', participants: Object.values(PARTICIPANTS).filter(p => p.package === 1) },
+  ];
+
+  let html = '';
+  groups.forEach(g => {
+    html += `<div class="section-title" style="margin-top:12px;">${g.label}</div>`;
+    g.participants.sort((a, b) => a.name.localeCompare(b.name)).forEach(p => {
+      const cabin = assignMap[p.qrId];
+      html += `
+        <div class="assign-row" onclick="openCabinPicker('${p.qrId}')">
+          <div class="assign-info">
+            <strong>${p.name}</strong>
+            <span class="tag">${p.packageLabel}</span>
+          </div>
+          <div class="assign-cabin ${cabin ? 'assigned' : 'unassigned'}">
+            ${cabin ? `Cabin ${cabin}` : 'Tap to assign'}
+          </div>
+        </div>`;
+    });
+  });
+  document.getElementById('cabin-assign-list').innerHTML = html;
+
+  // Cabin map
+  renderCabinMap(cabinToQr);
+}
+
+function renderCabinMap(cabinToQr) {
+  let html = '';
+  const sections = [
+    { label: 'Cabins 1–19 (4-person)', start: 1, end: 19 },
+    { label: 'Cabins 20–42 (5-person)', start: 20, end: 42 },
+    { label: 'Cabins 43–62 (4-person)', start: 43, end: 62 },
+  ];
+
+  sections.forEach(sec => {
+    html += `<div class="section-title" style="margin-top:12px;">${sec.label}</div><div class="cabin-grid">`;
+    for (let i = sec.start; i <= sec.end; i++) {
+      const qrId = cabinToQr[i];
+      const p = qrId ? PARTICIPANTS[qrId] : null;
+      const cls = p ? 'cabin-cell occupied' : 'cabin-cell free';
+      html += `<div class="${cls}" title="${p ? p.name : 'Free'}">
+        <span class="cabin-num">${i}</span>
+        <span class="cabin-occupant">${p ? p.name.split(' ')[0] : '—'}</span>
+      </div>`;
+    }
+    html += `</div>`;
+  });
+
+  document.getElementById('cabin-grid-container').innerHTML = html;
+}
+
+async function openCabinPicker(qrId) {
+  const p = PARTICIPANTS[qrId];
+  const assignments = await getAllCabinAssignments();
+  const occupied = new Set(assignments.map(a => a.cabinNumber));
+  const current = assignments.find(a => a.qrId === qrId);
+  const requiredCapacity = p.groupSize;
+
+  // Build picker
+  const available = CABINS.filter(c =>
+    c.capacity >= requiredCapacity && (!occupied.has(c.number) || (current && current.cabinNumber === c.number))
+  );
+
+  let html = `<div class="cabin-picker-overlay" id="cabin-picker">
+    <div class="cabin-picker">
+      <div class="picker-header">
+        <strong>${p.name}</strong> — ${p.packageLabel}
+        <button class="picker-close" onclick="closeCabinPicker()">✕</button>
+      </div>
+      ${current ? `<button class="action-btn secondary" onclick="removeCabinAssignment('${qrId}')" style="margin:8px 0;">Remove current assignment (Cabin ${current.cabinNumber})</button>` : ''}
+      <div class="picker-cabins">`;
+
+  available.forEach(c => {
+    const isCurrent = current && current.cabinNumber === c.number;
+    html += `<button class="picker-cabin-btn ${isCurrent ? 'current' : ''}" onclick="selectCabin('${qrId}', ${c.number})">
+      ${c.number} <small>(${c.type})</small>
+      ${isCurrent ? ' ✓' : ''}
+    </button>`;
+  });
+
+  html += `</div></div></div>`;
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
+function closeCabinPicker() {
+  const el = document.getElementById('cabin-picker');
+  if (el) el.remove();
+}
+
+async function selectCabin(qrId, cabinNumber) {
+  await assignCabin(qrId, cabinNumber);
+  closeCabinPicker();
+  loadCabins();
+}
+
+async function removeCabinAssignment(qrId) {
+  await unassignCabin(qrId);
+  closeCabinPicker();
+  loadCabins();
+}
+
+function showCabinView(view) {
+  document.querySelectorAll('.cabin-view').forEach(v => v.style.display = 'none');
+  document.querySelectorAll('.cabin-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`cabin-${view === 'assignments' ? 'assignments' : 'map'}`).style.display = 'block';
+  event.target.classList.add('active');
+}
+
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', () => {
   // Build meal buttons
@@ -232,6 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const screen = btn.dataset.screen;
       showScreen(screen);
       if (screen === 'dashboard') loadDashboard();
+      if (screen === 'cabins') loadCabins();
     });
   });
 

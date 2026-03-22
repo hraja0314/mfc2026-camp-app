@@ -219,3 +219,110 @@ body {
 
 /* Section heading */
 .section-title { font-size: 16px; font-weight: 700; margin: 16px 0 8px; }
+
+/* Cabin tabs */
+.cabin-tabs { display: flex; gap: 8px; margin: 12px 0; }
+.cabin-tab {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
+.cabin-tab.active { border-color: var(--green); background: var(--green-bg); color: var(--green); }
+
+/* Assignment rows */
+.assign-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.assign-row:active { background: #f1f5f9; }
+.assign-info { display: flex; flex-direction: column; gap: 4px; }
+.assign-cabin {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.assign-cabin.assigned { background: var(--green-bg); color: var(--green); }
+.assign-cabin.unassigned { background: #f1f5f9; color: var(--gray); }
+
+/* Cabin grid map */
+.cabin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 6px;
+  margin: 8px 0;
+}
+.cabin-cell {
+  border-radius: 8px;
+  padding: 8px 4px;
+  text-align: center;
+  font-size: 11px;
+}
+.cabin-cell.free { background: #f1f5f9; color: var(--gray); }
+.cabin-cell.occupied { background: var(--green-bg); color: var(--green); }
+.cabin-num { display: block; font-size: 16px; font-weight: 700; }
+.cabin-occupant { display: block; font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Cabin picker overlay */
+.cabin-picker-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.cabin-picker {
+  background: var(--card);
+  border-radius: 20px 20px 0 0;
+  padding: 20px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+.picker-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+.picker-cabins {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 8px;
+}
+.picker-cabin-btn {
+  padding: 10px 6px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
+.picker-cabin-btn:active { background: var(--green-bg); border-color: var(--green); }
+.picker-cabin-btn.current { background: var(--green-bg); border-color: var(--green); }
+.picker-cabin-btn small { display: block; font-size: 10px; font-weight: 400; color: var(--gray); }
