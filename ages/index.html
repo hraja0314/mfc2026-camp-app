@@ -263,38 +263,29 @@
       }
 
       try {
-        // Use hidden form + iframe to bypass CORS (most reliable for Apps Script)
+        // Build URL with parameters (GET works reliably with Apps Script redirects)
+        const params = new URLSearchParams({
+          ref: currentRef,
+          name: reg.name,
+          packageLabel: reg.packageLabel,
+          groupSize: reg.groupSize,
+          ages: JSON.stringify(ages),
+        });
+
         const iframe = document.createElement('iframe');
         iframe.name = 'age-submit-frame';
         iframe.style.display = 'none';
         document.body.appendChild(iframe);
+        iframe.src = APPS_SCRIPT_URL + '?' + params.toString();
 
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = APPS_SCRIPT_URL;
-        form.target = 'age-submit-frame';
-
-        const fields = { ref: currentRef, name: reg.name, packageLabel: reg.packageLabel, groupSize: reg.groupSize, ages: JSON.stringify(ages) };
-        for (const [key, val] of Object.entries(fields)) {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = key;
-          input.value = val;
-          form.appendChild(input);
-        }
-
-        document.body.appendChild(form);
-        form.submit();
-
-        // Wait a moment for submission, then show success
+        // Wait for submission, then show success
         setTimeout(() => {
-          form.remove();
           iframe.remove();
           document.getElementById('step-ages').classList.add('hidden');
           document.getElementById('step-done').classList.remove('hidden');
           btn.disabled = false;
           btn.textContent = 'Submit Ages';
-        }, 2000);
+        }, 3000);
       } catch (err) {
         errEl.textContent = 'Failed to submit. Please check your internet connection and try again.';
         errEl.classList.remove('hidden');
