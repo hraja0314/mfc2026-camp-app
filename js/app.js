@@ -52,7 +52,7 @@ function showManualLookup() {
   const list = Object.values(PARTICIPANTS)
     .sort((a, b) => a.name.localeCompare(b.name))
     .map(p => `
-      <div class="lookup-item" onclick="manualCheckin('${p.qrId}')">
+      <div class="lookup-item" onclick="showParticipantDetail('${p.qrId}')">
         <strong>${p.name}</strong>
         <span class="tag">${p.packageLabel}</span>
       </div>
@@ -71,15 +71,101 @@ function filterLookup() {
   });
 }
 
+async function showParticipantDetail(qrId) {
+  const p = PARTICIPANTS[qrId];
+  const checkins = await getAllCheckins();
+  const ci = checkins.find(c => c.qrId === qrId);
+  const scans = await getAllMealScans();
+  const mealCounts = {};
+  scans.filter(s => s.qrId === qrId).forEach(s => {
+    mealCounts[s.mealId] = (mealCounts[s.mealId] || 0) + 1;
+  });
+  const assignments = await getAllCabinAssignments();
+  const cabin = assignments.find(a => a.qrId === qrId);
+
+  const remaining = parseFloat(p.remainingAmount || '0');
+  const paymentClass = remaining > 0 ? 'payment-due' : 'payment-clear';
+  const paymentIcon = remaining > 0 ? '⚠️' : '✅';
+
+  let mealHtml = '';
+  MEALS.forEach(m => {
+    const eligible = p.mealsAllowed.includes(m.id);
+    if (!eligible) return;
+    const used = mealCounts[m.id] || 0;
+    const cls = used >= p.groupSize ? 'meal-done' : (used > 0 ? 'meal-partial' : 'meal-none');
+    mealHtml += `<span class="detail-meal ${cls}">${m.name.replace(' ', '<br>')}<br>${used}/${p.groupSize}</span>`;
+  });
+
+  const html = `
+    <div class="detail-card">
+      <div class="detail-header">
+        <h2>${p.name}</h2>
+        <span class="tag">${p.packageLabel}</span>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-row">
+          <span class="detail-label">📧 Email</span>
+          <span class="detail-value">${p.email || '—'}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">📱 Phone</span>
+          <span class="detail-value">${p.phone || '—'}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">📋 Ref</span>
+          <span class="detail-value">${p.ref}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">👥 Group Size</span>
+          <span class="detail-value">${p.groupSize} ${p.groupSize === 1 ? 'person' : 'people'}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">📅 Registered</span>
+          <span class="detail-value">${p.registrationDate || '—'}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">🏠 Cabin</span>
+          <span class="detail-value">${cabin ? 'Cabin ' + cabin.cabinNumber : 'Not assigned'}</span>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-title">${paymentIcon} Payment</div>
+        <div class="detail-payment ${paymentClass}">
+          <div class="pay-row"><span>Program Fee</span><span>$${p.programFee}</span></div>
+          <div class="pay-row"><span>Amount Paid</span><span>$${p.amountPaid}</span></div>
+          ${remaining > 0 ? `<div class="pay-row pay-due"><span>Remaining</span><span>$${p.remainingAmount}</span></div>` : ''}
+          <div class="pay-row"><span>Status</span><span>${p.transactionStatus}</span></div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-title">🍽️ Meals</div>
+        <div class="detail-meals">${mealHtml}</div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-title">✅ Check-In</div>
+        ${ci
+          ? `<div class="detail-checkin checked">Checked in at ${formatTime(ci.time)}</div>`
+          : `<button class="action-btn" onclick="manualCheckin('${p.qrId}')">Check In Now</button>`
+        }
+      </div>
+
+      <button class="action-btn secondary" onclick="showManualLookup()" style="margin-top:12px;">← Back to List</button>
+    </div>`;
+
+  document.getElementById('checkin-result').innerHTML = html;
+}
+
 async function manualCheckin(qrId) {
   const participant = PARTICIPANTS[qrId];
   const result = await addCheckin(qrId);
   if (result.duplicate) {
-    showCheckinResult('duplicate',
-      `<strong>${participant.name}</strong><br>Already checked in at ${formatTime(result.time)}`);
+    showParticipantDetail(qrId);
   } else {
-    showCheckinResult('success',
-      `<strong>${participant.name}</strong><br>✓ Checked in at ${formatTime(result.time)}`);
+    showParticipantDetail(qrId);
   }
 }
 
