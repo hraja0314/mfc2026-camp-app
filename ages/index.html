@@ -263,27 +263,41 @@
       }
 
       try {
-        const payload = JSON.stringify({
-          ref: currentRef,
-          name: reg.name,
-          packageLabel: reg.packageLabel,
-          groupSize: reg.groupSize,
-          ages: ages,
-        });
+        // Use hidden form + iframe to bypass CORS (most reliable for Apps Script)
+        const iframe = document.createElement('iframe');
+        iframe.name = 'age-submit-frame';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
 
-        // Use form-encoded POST (works with Google Apps Script CORS)
-        await fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          body: new URLSearchParams({ data: payload }),
-        });
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = APPS_SCRIPT_URL;
+        form.target = 'age-submit-frame';
 
-        document.getElementById('step-ages').classList.add('hidden');
-        document.getElementById('step-done').classList.remove('hidden');
+        const fields = { ref: currentRef, name: reg.name, packageLabel: reg.packageLabel, groupSize: reg.groupSize, ages: JSON.stringify(ages) };
+        for (const [key, val] of Object.entries(fields)) {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = val;
+          form.appendChild(input);
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+
+        // Wait a moment for submission, then show success
+        setTimeout(() => {
+          form.remove();
+          iframe.remove();
+          document.getElementById('step-ages').classList.add('hidden');
+          document.getElementById('step-done').classList.remove('hidden');
+          btn.disabled = false;
+          btn.textContent = 'Submit Ages';
+        }, 2000);
       } catch (err) {
         errEl.textContent = 'Failed to submit. Please check your internet connection and try again.';
         errEl.classList.remove('hidden');
-      } finally {
         btn.disabled = false;
         btn.textContent = 'Submit Ages';
       }
