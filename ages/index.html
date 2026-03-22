@@ -95,19 +95,40 @@
     .age-field {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       margin-bottom: 10px;
     }
     .age-field .person-label {
       font-size: 14px;
       font-weight: 600;
       white-space: nowrap;
-      min-width: 80px;
+      min-width: 70px;
     }
-    .age-field input {
+    .age-field input[type="number"] {
       margin-bottom: 0;
+      width: 70px;
+      flex: none;
+    }
+    .gender-toggle {
+      display: flex;
+      gap: 0;
       flex: 1;
     }
+    .gender-btn {
+      flex: 1;
+      padding: 10px 4px;
+      border: 2px solid var(--border);
+      background: var(--card);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .gender-btn:first-child { border-radius: 10px 0 0 10px; }
+    .gender-btn:last-child { border-radius: 0 10px 10px 0; border-left: none; }
+    .gender-btn.selected-m { background: #dbeafe; border-color: #3b82f6; color: #1d4ed8; }
+    .gender-btn.selected-f { background: #fce7f3; border-color: #ec4899; color: #be185d; }
 
     .hidden { display: none; }
 
@@ -222,6 +243,10 @@
         div.innerHTML = `
           <span class="person-label">Person ${i}</span>
           <input type="number" id="age-${i}" min="0" max="120" placeholder="Age" inputmode="numeric">
+          <div class="gender-toggle">
+            <button type="button" class="gender-btn" id="gender-m-${i}" onclick="selectGender(${i},'Brother')">Brother</button>
+            <button type="button" class="gender-btn" id="gender-f-${i}" onclick="selectGender(${i},'Sister')">Sister</button>
+          </div>
         `;
         container.appendChild(div);
       }
@@ -234,6 +259,7 @@
     async function submitAges() {
       const reg = REGISTRATIONS[currentRef];
       const ages = [];
+      const genders = [];
       const errEl = document.getElementById('age-error');
 
       for (let i = 1; i <= reg.groupSize; i++) {
@@ -244,7 +270,16 @@
           document.getElementById(`age-${i}`).focus();
           return;
         }
+        const mBtn = document.getElementById(`gender-m-${i}`);
+        const fBtn = document.getElementById(`gender-f-${i}`);
+        const gender = mBtn.dataset.selected || fBtn.dataset.selected || '';
+        if (!gender) {
+          errEl.textContent = `Please select Brother or Sister for Person ${i}.`;
+          errEl.classList.remove('hidden');
+          return;
+        }
         ages.push(parseInt(val));
+        genders.push(gender);
       }
 
       errEl.classList.add('hidden');
@@ -268,6 +303,7 @@
         packageLabel: reg.packageLabel,
         groupSize: reg.groupSize,
         ages: JSON.stringify(ages),
+        genders: JSON.stringify(genders),
       });
       const url = APPS_SCRIPT_URL + '?' + params.toString();
       console.log('[MFC] Submitting to:', url);
@@ -318,6 +354,14 @@
     document.getElementById('ref-input').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') lookupRef();
     });
+
+    function selectGender(i, gender) {
+      document.getElementById(`gender-m-${i}`).className = 'gender-btn';
+      document.getElementById(`gender-f-${i}`).className = 'gender-btn';
+      const sel = gender === 'Brother' ? `gender-m-${i}` : `gender-f-${i}`;
+      document.getElementById(sel).className = 'gender-btn ' + (gender === 'Brother' ? 'selected-m' : 'selected-f');
+      document.getElementById(sel).dataset.selected = gender;
+    }
   </script>
 </body>
 </html>
