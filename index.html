@@ -71,7 +71,10 @@
     <div class="section-title">Dashboard</div>
     <div id="stats" class="stats-row"></div>
     <input type="text" id="dash-search" class="search-input" placeholder="Search by name..." oninput="filterDashboard()">
-    <button class="action-btn secondary" onclick="doExport()" style="margin-bottom:8px;">📥 Export CSV</button>
+    <div style="display:flex; gap:8px; margin-bottom:8px;">
+      <button class="action-btn secondary" onclick="doExport()" style="flex:1;">📥 Export CSV</button>
+      <button class="action-btn secondary" onclick="confirmReset()" style="flex:0 0 auto; background:#fee2e2; color:#dc2626;">🗑️ Reset</button>
+    </div>
     <div id="dash-table-container" class="table-container"></div>
   </div>
 

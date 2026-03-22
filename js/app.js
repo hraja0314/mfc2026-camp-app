@@ -207,6 +207,25 @@ async function doExport() {
   URL.revokeObjectURL(url);
 }
 
+function confirmReset() {
+  const msg = 'This will DELETE all check-ins, meal scans, and cabin assignments.\n\nAre you sure?';
+  if (!confirm(msg)) return;
+  if (!confirm('REALLY delete everything? This cannot be undone.')) return;
+  resetAllData();
+}
+
+async function resetAllData() {
+  const db = await openDB();
+  const tx = db.transaction(['checkins', 'mealScans', 'cabinAssignments'], 'readwrite');
+  tx.objectStore('checkins').clear();
+  tx.objectStore('mealScans').clear();
+  tx.objectStore('cabinAssignments').clear();
+  tx.oncomplete = () => {
+    alert('All data has been reset.');
+    loadDashboard();
+  };
+}
+
 // ===== Helpers =====
 function formatTime(iso) {
   if (!iso) return '';
