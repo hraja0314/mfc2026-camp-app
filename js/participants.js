@@ -1,0 +1,811 @@
+const PARTICIPANTS = {
+  "MFC-SR-005103": {
+    "qrId": "MFC-SR-005103",
+    "name": "Omer Ali",
+    "email": "Mmaliomer51@gmail.com",
+    "phone": "(949) 407-3956",
+    "package": 1,
+    "packageLabel": "Single - Shared Cabin",
+    "groupSize": 1,
+    "ref": "SR-005103",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004740": {
+    "qrId": "MFC-SR-004740",
+    "name": "Syed Sohail",
+    "email": "syedjafarsohail@yahoo.com",
+    "phone": "(347) 730-7350",
+    "package": 1,
+    "packageLabel": "Single - Shared Cabin",
+    "groupSize": 1,
+    "ref": "SR-004740",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-005057": {
+    "qrId": "MFC-SR-005057",
+    "name": "Tarek Gadd",
+    "email": "Tareknnoor@gmail.com",
+    "phone": "(909) 702-6592",
+    "package": 1,
+    "packageLabel": "Single - Shared Cabin",
+    "groupSize": 1,
+    "ref": "SR-005057",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004975": {
+    "qrId": "MFC-SR-004975",
+    "name": "Ahmad Rizwan",
+    "email": "rafz429@gmail.com",
+    "phone": "(840) 466-4054",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004975",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004720": {
+    "qrId": "MFC-SR-004720",
+    "name": "ARFAN MAJEED",
+    "email": "arfanm@gmail.com",
+    "phone": "(626) 831-5748",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004720",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004656": {
+    "qrId": "MFC-SR-004656",
+    "name": "Azeem Khan",
+    "email": "aziimkhan@hotmail.com",
+    "phone": "(949) 231-0789",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004656",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004965": {
+    "qrId": "MFC-SR-004965",
+    "name": "Daod  Mohammad",
+    "email": "Minakhulm@gmail.com",
+    "phone": "(562) 247-8552",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004965",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004913": {
+    "qrId": "MFC-SR-004913",
+    "name": "Farzana  Kabir",
+    "email": "elora_786@yahoo.com",
+    "phone": "(818) 331-7982",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004913",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-005031": {
+    "qrId": "MFC-SR-005031",
+    "name": "Habib  Awan",
+    "email": "hurawan@gmail.com",
+    "phone": "(424) 999-8966",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-005031",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004663": {
+    "qrId": "MFC-SR-004663",
+    "name": "Ismail Hossain",
+    "email": "sony_duet@yahoo.com",
+    "phone": "(213) 292-8265",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004663",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-005030": {
+    "qrId": "MFC-SR-005030",
+    "name": "Kaleem Rana",
+    "email": "Krana99@gmail.com",
+    "phone": "(310) 760-6269",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-005030",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004950": {
+    "qrId": "MFC-SR-004950",
+    "name": "KHWAJA AHMAD",
+    "email": "koahmad90@gmail.com",
+    "phone": "(909) 680-9182",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004950",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004928": {
+    "qrId": "MFC-SR-004928",
+    "name": "Mohammad Qamar",
+    "email": "m_haris_q@hotmail.com",
+    "phone": "(949) 294-8183",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004928",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004877": {
+    "qrId": "MFC-SR-004877",
+    "name": "Nadim Rana",
+    "email": "nrana99@gmail.com",
+    "phone": "(310) 760-6212",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004877",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004688": {
+    "qrId": "MFC-SR-004688",
+    "name": "Nawaid Rana",
+    "email": "nawaidrana@yahoo.com",
+    "phone": "(415) 656-9850",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004688",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004926": {
+    "qrId": "MFC-SR-004926",
+    "name": "Noreen Islam",
+    "email": "noreenislam@yahoo.com",
+    "phone": "(714) 471-1157",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004926",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004746": {
+    "qrId": "MFC-SR-004746",
+    "name": "Parvez Barkat",
+    "email": "ppbarkat@gmail.com",
+    "phone": "(818) 384-5244",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004746",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004934": {
+    "qrId": "MFC-SR-004934",
+    "name": "Rukaya Baaghil",
+    "email": "rbaaghil@gmail.com",
+    "phone": "(415) 800-4009",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004934",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004964": {
+    "qrId": "MFC-SR-004964",
+    "name": "Saba Zuberi",
+    "email": "saba.zuberi@gmail.com",
+    "phone": "(630) 301-0212",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004964",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004944": {
+    "qrId": "MFC-SR-004944",
+    "name": "Shahid Imtiaz",
+    "email": "Awmian@gmail.com",
+    "phone": "(714) 732-8331",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004944",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-005018": {
+    "qrId": "MFC-SR-005018",
+    "name": "Shema Hossain",
+    "email": "shema.hoosain@gmail.com",
+    "phone": "(562) 644-5603",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-005018",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004741": {
+    "qrId": "MFC-SR-004741",
+    "name": "Tahia Syeda",
+    "email": "tahiasyeda@gmail.com",
+    "phone": "(702) 608-2442",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004741",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004702": {
+    "qrId": "MFC-SR-004702",
+    "name": "Taifa Humayun",
+    "email": "Taifa.humayun@outlook.com",
+    "phone": "(626) 716-4708",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004702",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004791": {
+    "qrId": "MFC-SR-004791",
+    "name": "Yusuf Anwar",
+    "email": "yusufbeta01@yahoo.com",
+    "phone": "(562) 316-6332",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004791",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004658": {
+    "qrId": "MFC-SR-004658",
+    "name": "Zeeshan Masood",
+    "email": "Masoodzeeshan@gmail.com",
+    "phone": "(310) 625-6171",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004658",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004657": {
+    "qrId": "MFC-SR-004657",
+    "name": "Zeeshan Masood",
+    "email": "Masoodzeeshan@gmail.com",
+    "phone": "(310) 625-6171",
+    "package": 2,
+    "packageLabel": "Cabin of 4",
+    "groupSize": 4,
+    "ref": "SR-004657",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004949": {
+    "qrId": "MFC-SR-004949",
+    "name": "Amna Latif",
+    "email": "amnakhan112615@gmail.com",
+    "phone": "(714) 271-6248",
+    "package": 3,
+    "packageLabel": "Cabin of 5",
+    "groupSize": 5,
+    "ref": "SR-004949",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004745": {
+    "qrId": "MFC-SR-004745",
+    "name": "Aslam Shareef",
+    "email": "aslamshareef74@yahoo.com",
+    "phone": "(510) 468-5143",
+    "package": 3,
+    "packageLabel": "Cabin of 5",
+    "groupSize": 5,
+    "ref": "SR-004745",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004677": {
+    "qrId": "MFC-SR-004677",
+    "name": "Beenish Awan",
+    "email": "beenish.awan81@gmail.com",
+    "phone": "(858) 848-4051",
+    "package": 3,
+    "packageLabel": "Cabin of 5",
+    "groupSize": 5,
+    "ref": "SR-004677",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-005047": {
+    "qrId": "MFC-SR-005047",
+    "name": "Hashim Jakvani",
+    "email": "jakvani79@gmail.com",
+    "phone": "(714) 396-3083",
+    "package": 3,
+    "packageLabel": "Cabin of 5",
+    "groupSize": 5,
+    "ref": "SR-005047",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004860": {
+    "qrId": "MFC-SR-004860",
+    "name": "Hoveda  Mufti",
+    "email": "hoveda1@gmail.com",
+    "phone": "(401) 261-2380",
+    "package": 3,
+    "packageLabel": "Cabin of 5",
+    "groupSize": 5,
+    "ref": "SR-004860",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004703": {
+    "qrId": "MFC-SR-004703",
+    "name": "KHAWAJA NAJEEB",
+    "email": "adilnajeeb83@gmail.com",
+    "phone": "(714) 866-8678",
+    "package": 3,
+    "packageLabel": "Cabin of 5",
+    "groupSize": 5,
+    "ref": "SR-004703",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004750": {
+    "qrId": "MFC-SR-004750",
+    "name": "Maged Elsharkawy",
+    "email": "egus86@gmail.com",
+    "phone": "(469) 888-3380",
+    "package": 3,
+    "packageLabel": "Cabin of 5",
+    "groupSize": 5,
+    "ref": "SR-004750",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004858": {
+    "qrId": "MFC-SR-004858",
+    "name": "Maria Mir",
+    "email": "Mariajqureshi@yahoo.com",
+    "phone": "(909) 568-1412",
+    "package": 3,
+    "packageLabel": "Cabin of 5",
+    "groupSize": 5,
+    "ref": "SR-004858",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004927": {
+    "qrId": "MFC-SR-004927",
+    "name": "Mohammad Jiwa",
+    "email": "mohammad.jiwa@yahoo.com",
+    "phone": "(714) 333-7482",
+    "package": 3,
+    "packageLabel": "Cabin of 5",
+    "groupSize": 5,
+    "ref": "SR-004927",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004985": {
+    "qrId": "MFC-SR-004985",
+    "name": "Mutalip Kurban",
+    "email": "mutalip.kurban@gmail.com",
+    "phone": "(714) 926-0704",
+    "package": 3,
+    "packageLabel": "Cabin of 5",
+    "groupSize": 5,
+    "ref": "SR-004985",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004680": {
+    "qrId": "MFC-SR-004680",
+    "name": "Nader Shakir",
+    "email": "nader.shakir@gmail.com",
+    "phone": "(412) 889-1847",
+    "package": 3,
+    "packageLabel": "Cabin of 5",
+    "groupSize": 5,
+    "ref": "SR-004680",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004813": {
+    "qrId": "MFC-SR-004813",
+    "name": "Tarek Gadd",
+    "email": "Tareknnoor@gmail.com",
+    "phone": "(909) 702-6592",
+    "package": 3,
+    "packageLabel": "Cabin of 5",
+    "groupSize": 5,
+    "ref": "SR-004813",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004747": {
+    "qrId": "MFC-SR-004747",
+    "name": "Tasneem Vazifdar",
+    "email": "tasneemvazifdar@gmail.com",
+    "phone": "(310) 592-9376",
+    "package": 3,
+    "packageLabel": "Cabin of 5",
+    "groupSize": 5,
+    "ref": "SR-004747",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004815": {
+    "qrId": "MFC-SR-004815",
+    "name": "Wissem Brinis",
+    "email": "Wissem.brinis@gmail.com",
+    "phone": "(619) 307-1895",
+    "package": 3,
+    "packageLabel": "Cabin of 5",
+    "groupSize": 5,
+    "ref": "SR-004815",
+    "mealsAllowed": [
+      "FRI-DIN",
+      "SAT-BRK",
+      "SAT-LUN",
+      "SAT-DIN",
+      "SUN-BRK",
+      "SUN-LUN"
+    ]
+  },
+  "MFC-SR-004914": {
+    "qrId": "MFC-SR-004914",
+    "name": "Ali Nawab",
+    "email": "thenawabfamily@gmail.com",
+    "phone": "(323) 253-5142",
+    "package": 4,
+    "packageLabel": "Day Camper",
+    "groupSize": 1,
+    "ref": "SR-004914",
+    "mealsAllowed": [
+      "SAT-LUN",
+      "SAT-DIN"
+    ]
+  },
+  "MFC-SR-004969": {
+    "qrId": "MFC-SR-004969",
+    "name": "Ali Nawab",
+    "email": "thenawabfamily@gmail.com",
+    "phone": "(323) 253-5142",
+    "package": 4,
+    "packageLabel": "Day Camper",
+    "groupSize": 1,
+    "ref": "SR-004969",
+    "mealsAllowed": [
+      "SAT-LUN",
+      "SAT-DIN"
+    ]
+  },
+  "MFC-SR-004973": {
+    "qrId": "MFC-SR-004973",
+    "name": "Maged Elsharkawy",
+    "email": "egus86@gmail.com",
+    "phone": "(469) 888-3380",
+    "package": 4,
+    "packageLabel": "Day Camper",
+    "groupSize": 1,
+    "ref": "SR-004973",
+    "mealsAllowed": [
+      "SAT-LUN",
+      "SAT-DIN"
+    ]
+  },
+  "MFC-SR-004974": {
+    "qrId": "MFC-SR-004974",
+    "name": "Maged Elsharkawy",
+    "email": "egus86@gmail.com",
+    "phone": "(469) 888-3380",
+    "package": 4,
+    "packageLabel": "Day Camper",
+    "groupSize": 1,
+    "ref": "SR-004974",
+    "mealsAllowed": [
+      "SAT-LUN",
+      "SAT-DIN"
+    ]
+  }
+};
+
+const MEALS = [
+  {
+    "id": "FRI-DIN",
+    "name": "Friday Dinner",
+    "day": "Friday"
+  },
+  {
+    "id": "SAT-BRK",
+    "name": "Saturday Breakfast",
+    "day": "Saturday"
+  },
+  {
+    "id": "SAT-LUN",
+    "name": "Saturday Lunch",
+    "day": "Saturday"
+  },
+  {
+    "id": "SAT-DIN",
+    "name": "Saturday Dinner",
+    "day": "Saturday"
+  },
+  {
+    "id": "SUN-BRK",
+    "name": "Sunday Breakfast",
+    "day": "Sunday"
+  },
+  {
+    "id": "SUN-LUN",
+    "name": "Sunday Lunch",
+    "day": "Sunday"
+  }
+];

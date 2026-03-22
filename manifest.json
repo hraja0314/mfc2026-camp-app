@@ -1,0 +1,10 @@
+{
+  "name": "MFC 2026",
+  "short_name": "MFC 2026",
+  "description": "Muslim Family Camp 2026 - Registration & Meal Tracking",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#065f46",
+  "icons": []
+}

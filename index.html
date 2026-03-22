@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#065f46">
+  <title>MFC 2026</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="header">
+    <h1>🏕️ Muslim Family Camp 2026</h1>
+    <small>Camp Seely • April 3–5</small>
+  </div>
+
+  <!-- ===== HOME ===== -->
+  <div id="home" class="screen">
+    <div class="home-grid">
+      <div class="home-btn" onclick="showScreen('checkin'); startCheckin()">
+        <span class="icon">📋</span>
+        <span class="label">Check In</span>
+      </div>
+      <div class="home-btn" onclick="showScreen('meals')">
+        <span class="icon">🍽️</span>
+        <span class="label">Meal Scan</span>
+      </div>
+      <div class="home-btn" onclick="showScreen('dashboard'); loadDashboard()">
+        <span class="icon">📊</span>
+        <span class="label">Dashboard</span>
+      </div>
+      <div class="home-btn" onclick="showScreen('checkin'); showManualLookup()">
+        <span class="icon">🔍</span>
+        <span class="label">Lookup</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHECK-IN ===== -->
+  <div id="checkin" class="screen">
+    <div class="section-title">Check-In</div>
+    <div id="checkin-scanner-area" class="scanner-area" style="display:none;">
+      <div id="checkin-reader"></div>
+    </div>
+    <div id="checkin-result"></div>
+    <button class="action-btn primary" onclick="startCheckin()">📷 Scan QR Code</button>
+    <button class="action-btn secondary" onclick="showManualLookup()">🔍 Search by Name</button>
+  </div>
+
+  <!-- ===== MEALS ===== -->
+  <div id="meals" class="screen">
+    <div class="section-title">Meal Tracking</div>
+    <p style="font-size:13px; color:var(--gray); margin-bottom:8px;">Select a meal, then scan:</p>
+    <div id="meal-grid" class="meal-grid"></div>
+    <div id="meal-scanner-area" class="scanner-area" style="display:none;">
+      <div id="meal-reader"></div>
+    </div>
+    <div id="meal-result"></div>
+    <button id="meal-scan-btn" class="action-btn primary" onclick="startMealScan()" disabled>📷 Scan for Meal</button>
+  </div>
+
+  <!-- ===== DASHBOARD ===== -->
+  <div id="dashboard" class="screen">
+    <div class="section-title">Dashboard</div>
+    <div id="stats" class="stats-row"></div>
+    <input type="text" id="dash-search" class="search-input" placeholder="Search by name..." oninput="filterDashboard()">
+    <button class="action-btn secondary" onclick="doExport()" style="margin-bottom:8px;">📥 Export CSV</button>
+    <div id="dash-table-container" class="table-container"></div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-screen="home">
+      <span class="icon">🏠</span> Home
+    </button>
+    <button class="nav-btn" data-screen="checkin">
+      <span class="icon">📋</span> Check-In
+    </button>
+    <button class="nav-btn" data-screen="meals">
+      <span class="icon">🍽️</span> Meals
+    </button>
+    <button class="nav-btn" data-screen="dashboard">
+      <span class="icon">📊</span> Dashboard
+    </button>
+  </nav>
+
+  <script src="lib/html5-qrcode.min.js"></script>
+  <script src="js/participants.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/scanner.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>
