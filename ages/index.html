@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MFC 2026 — Age Information</title>
+  <style>
+    :root {
+      --green: #16a34a;
+      --green-bg: #dcfce7;
+      --red: #dc2626;
+      --red-bg: #fee2e2;
+      --gray: #6b7280;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: #1e293b;
+      min-height: 100vh;
+      -webkit-text-size-adjust: 100%;
+    }
+    .header {
+      background: linear-gradient(135deg, #065f46, #047857);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .header h1 { font-size: 20px; font-weight: 700; }
+    .header small { font-size: 13px; opacity: 0.85; }
+    .container { max-width: 480px; margin: 0 auto; padding: 20px; }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 16px 0;
+      border: 1px solid var(--border);
+    }
+    .card h2 { font-size: 16px; margin-bottom: 12px; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--gray);
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 16px;
+      -webkit-appearance: none;
+      margin-bottom: 12px;
+    }
+    input:focus { outline: none; border-color: var(--green); }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-primary { background: var(--green); color: white; }
+    .btn-secondary { background: #e2e8f0; color: #334155; margin-top: 8px; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .info-box {
+      padding: 14px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    .info-box.success { background: var(--green-bg); color: #065f46; }
+    .info-box.error { background: var(--red-bg); color: var(--red); }
+
+    .participant-info {
+      background: var(--green-bg);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .participant-info .name { font-size: 18px; font-weight: 700; color: #065f46; }
+    .participant-info .pkg { font-size: 13px; color: var(--gray); margin-top: 2px; }
+
+    .age-field {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .age-field .person-label {
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      min-width: 80px;
+    }
+    .age-field input {
+      margin-bottom: 0;
+      flex: 1;
+    }
+
+    .hidden { display: none; }
+
+    .footer {
+      text-align: center;
+      padding: 24px 20px;
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🏕️ Muslim Family Camp 2026</h1>
+    <small>Camp Seely • April 3–5, 2026</small>
+  </div>
+
+  <div class="container">
+    <!-- Step 1: Enter Ref -->
+    <div id="step-ref" class="card">
+      <h2>📋 Age Information Form</h2>
+      <p style="font-size:13px; color:var(--gray); margin-bottom:16px;">
+        Please provide the ages of everyone in your group. This helps us plan activities and accommodations.
+      </p>
+      <label for="ref-input">Registration Reference</label>
+      <input type="text" id="ref-input" placeholder="e.g. SR-004975" autocomplete="off" autocapitalize="characters">
+      <div id="ref-error" class="info-box error hidden"></div>
+      <button class="btn btn-primary" onclick="lookupRef()">Look Up</button>
+    </div>
+
+    <!-- Step 2: Enter Ages -->
+    <div id="step-ages" class="card hidden">
+      <div class="participant-info">
+        <div class="name" id="p-name"></div>
+        <div class="pkg" id="p-pkg"></div>
+      </div>
+
+      <h2>Enter ages for your group</h2>
+      <div id="age-fields"></div>
+      <div id="age-error" class="info-box error hidden"></div>
+      <button class="btn btn-primary" id="submit-btn" onclick="submitAges()">Submit Ages</button>
+      <button class="btn btn-secondary" onclick="goBack()">← Different Registration</button>
+    </div>
+
+    <!-- Step 3: Confirmation -->
+    <div id="step-done" class="card hidden">
+      <div class="info-box success" style="text-align:center; font-size:16px;">
+        ✅ Ages submitted successfully!
+      </div>
+      <p style="font-size:14px; color:var(--gray); text-align:center; margin:12px 0;">
+        Thank you! The registration team has been notified.
+      </p>
+      <button class="btn btn-secondary" onclick="startOver()">Submit for Another Registration</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    Muslim Family Camp 2026 • Registration Team
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    // ===== CONFIG =====
+    // After deploying the Google Apps Script, paste the web app URL here:
+    const APPS_SCRIPT_URL = '';
+
+    let currentRef = null;
+
+    function lookupRef() {
+      const raw = document.getElementById('ref-input').value.trim().toUpperCase();
+      const ref = raw.replace(/^MFC-/, '');
+      const errEl = document.getElementById('ref-error');
+
+      if (!ref) {
+        errEl.textContent = 'Please enter your registration reference.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      const reg = REGISTRATIONS[ref];
+      if (!reg) {
+        errEl.textContent = `Registration "${ref}" not found. Check your reference number and try again.`;
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      errEl.classList.add('hidden');
+      currentRef = ref;
+
+      document.getElementById('p-name').textContent = reg.name;
+      document.getElementById('p-pkg').textContent = `${reg.packageLabel} — ${reg.groupSize} ${reg.groupSize === 1 ? 'person' : 'people'}`;
+
+      // Build age fields
+      const container = document.getElementById('age-fields');
+      container.innerHTML = '';
+      for (let i = 1; i <= reg.groupSize; i++) {
+        const div = document.createElement('div');
+        div.className = 'age-field';
+        div.innerHTML = `
+          <span class="person-label">Person ${i}</span>
+          <input type="number" id="age-${i}" min="0" max="120" placeholder="Age" inputmode="numeric">
+        `;
+        container.appendChild(div);
+      }
+
+      document.getElementById('step-ref').classList.add('hidden');
+      document.getElementById('step-ages').classList.remove('hidden');
+      document.getElementById(`age-1`).focus();
+    }
+
+    async function submitAges() {
+      const reg = REGISTRATIONS[currentRef];
+      const ages = [];
+      const errEl = document.getElementById('age-error');
+
+      for (let i = 1; i <= reg.groupSize; i++) {
+        const val = document.getElementById(`age-${i}`).value.trim();
+        if (!val || isNaN(val) || parseInt(val) < 0 || parseInt(val) > 120) {
+          errEl.textContent = `Please enter a valid age for Person ${i}.`;
+          errEl.classList.remove('hidden');
+          document.getElementById(`age-${i}`).focus();
+          return;
+        }
+        ages.push(parseInt(val));
+      }
+
+      errEl.classList.add('hidden');
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Submitting...';
+
+      if (!APPS_SCRIPT_URL) {
+        // No backend configured — show message
+        btn.disabled = false;
+        btn.textContent = 'Submit Ages';
+        errEl.innerHTML = '⚠️ Backend not configured yet. Please ask the registration team lead to deploy the Google Apps Script and update the URL.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ref: currentRef,
+            name: reg.name,
+            packageLabel: reg.packageLabel,
+            groupSize: reg.groupSize,
+            ages: ages,
+          }),
+        });
+
+        // no-cors means we can't read the response, but the request goes through
+        document.getElementById('step-ages').classList.add('hidden');
+        document.getElementById('step-done').classList.remove('hidden');
+      } catch (err) {
+        errEl.textContent = 'Failed to submit. Please check your internet connection and try again.';
+        errEl.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Submit Ages';
+      }
+    }
+
+    function goBack() {
+      document.getElementById('step-ages').classList.add('hidden');
+      document.getElementById('step-ref').classList.remove('hidden');
+      document.getElementById('age-error').classList.add('hidden');
+    }
+
+    function startOver() {
+      document.getElementById('step-done').classList.add('hidden');
+      document.getElementById('step-ref').classList.remove('hidden');
+      document.getElementById('ref-input').value = '';
+      currentRef = null;
+    }
+
+    // Allow Enter key on ref input
+    document.getElementById('ref-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') lookupRef();
+    });
+  </script>
+</body>
+</html>
