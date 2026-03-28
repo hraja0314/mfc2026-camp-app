@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MFC 2026 — Age Information</title>
+  <title>MFC 2026 — Camper Information</title>
   <style>
     :root {
       --green: #16a34a;
@@ -91,6 +91,54 @@
     }
     .participant-info .name { font-size: 18px; font-weight: 700; color: #065f46; }
     .participant-info .pkg { font-size: 13px; color: var(--gray); margin-top: 2px; }
+
+    .form-section {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .section-heading {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .section-note {
+      font-size: 13px;
+      color: var(--gray);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .registration-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 4px;
+    }
+    .registration-option input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--green);
+      cursor: pointer;
+      flex: none;
+    }
+    .registration-option-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 0;
+      cursor: pointer;
+      color: #1e293b;
+      flex: 1;
+    }
+    .registration-option-label small {
+      color: var(--gray);
+      font-size: 12px;
+      font-weight: 400;
+    }
 
     .age-field {
       display: flex;
@@ -181,9 +229,9 @@
   <div class="container">
     <!-- Step 1: Enter Ref -->
     <div id="step-ref" class="card">
-      <h2>📋 Age Information Form</h2>
+      <h2>📋 Camper Information Form</h2>
       <p style="font-size:13px; color:var(--gray); margin-bottom:16px;">
-        Please provide the ages of everyone in your group. This helps us plan activities and accommodations.
+        Please complete your camper information before camp. We use this to plan meals, activities, and accommodations.
       </p>
       <label for="ref-input">Registration Reference</label>
       <input type="text" id="ref-input" placeholder="e.g. SR-004975" autocomplete="off" autocapitalize="characters">
@@ -191,24 +239,39 @@
       <button class="btn btn-primary" onclick="lookupRef()">Look Up</button>
     </div>
 
-    <!-- Step 2: Enter Ages -->
+    <!-- Step 2: Enter Camper Information -->
     <div id="step-ages" class="card hidden">
       <div class="participant-info">
         <div class="name" id="p-name"></div>
         <div class="pkg" id="p-pkg"></div>
       </div>
 
-      <h2>Enter ages for your group</h2>
-      <div id="age-fields"></div>
+      <div class="form-section" style="margin-top:0; padding-top:0; border-top:none;">
+        <div class="section-heading">Registration Preferences</div>
+        <div class="section-note">These apply to the whole registration.</div>
+        <div class="registration-option">
+          <input type="checkbox" id="nonspicy-registration">
+          <label for="nonspicy-registration" class="registration-option-label">
+            <span>Non-Spicy</span>
+            <small>Check this if your registration needs non-spicy food.</small>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-heading">Camper Details</div>
+        <div class="section-note">Enter one row for each person in your registration.</div>
+        <div id="age-fields"></div>
+      </div>
       <div id="age-error" class="info-box error hidden"></div>
-      <button class="btn btn-primary" id="submit-btn" onclick="submitAges()">Submit Ages</button>
+      <button class="btn btn-primary" id="submit-btn" onclick="submitAges()">Submit Information</button>
       <button class="btn btn-secondary" onclick="goBack()">← Different Registration</button>
     </div>
 
     <!-- Step 3: Confirmation -->
     <div id="step-done" class="card hidden">
       <div class="info-box success" style="text-align:center; font-size:16px;">
-        ✅ Ages submitted successfully!
+        ✅ Camper information submitted successfully!
       </div>
       <p style="font-size:14px; color:var(--gray); text-align:center; margin:12px 0;">
         Thank you! The registration team has been notified.
@@ -287,6 +350,7 @@
       const ages = [];
       const genders = [];
       const kidsMeals = [];
+      const nonSpicy = document.getElementById('nonspicy-registration').checked ? 'Yes' : 'No';
       const errEl = document.getElementById('age-error');
 
       for (let i = 1; i <= reg.groupSize; i++) {
@@ -319,7 +383,7 @@
       if (!APPS_SCRIPT_URL) {
         // No backend configured — show message
         btn.disabled = false;
-        btn.textContent = 'Submit Ages';
+        btn.textContent = 'Submit Information';
         errEl.innerHTML = '⚠️ Backend not configured yet. Please ask the registration team lead to deploy the Google Apps Script and update the URL.';
         errEl.classList.remove('hidden');
         return;
@@ -330,6 +394,7 @@
         name: reg.name,
         packageLabel: reg.packageLabel,
         groupSize: reg.groupSize,
+        nonSpicy: nonSpicy,
         ages: JSON.stringify(ages),
         genders: JSON.stringify(genders),
         kidsMeals: JSON.stringify(kidsMeals),
@@ -346,7 +411,7 @@
         done = true;
         console.log('[MFC] Request finished, success:', success);
         btn.disabled = false;
-        btn.textContent = 'Submit Ages';
+        btn.textContent = 'Submit Information';
         if (success) {
           document.getElementById('step-ages').classList.add('hidden');
           document.getElementById('step-done').classList.remove('hidden');
@@ -370,12 +435,14 @@
       document.getElementById('step-ages').classList.add('hidden');
       document.getElementById('step-ref').classList.remove('hidden');
       document.getElementById('age-error').classList.add('hidden');
+      document.getElementById('nonspicy-registration').checked = false;
     }
 
     function startOver() {
       document.getElementById('step-done').classList.add('hidden');
       document.getElementById('step-ref').classList.remove('hidden');
       document.getElementById('ref-input').value = '';
+      document.getElementById('nonspicy-registration').checked = false;
       currentRef = null;
     }
 
